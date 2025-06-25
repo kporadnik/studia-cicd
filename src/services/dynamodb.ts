@@ -60,6 +60,7 @@ export async function create(
 export async function update<T extends Record<string, unknown>>(
   tableName: string,
   primaryKey: string,
+  primaryKeyValue: string,
   data: T
 ) {
   try {
@@ -69,7 +70,7 @@ export async function update<T extends Record<string, unknown>>(
     const command = new UpdateItemCommand({
       TableName: tableName,
       Key: {
-        primaryKey: { S: primaryKey },
+        [primaryKey]: { S: primaryKeyValue },
       },
       UpdateExpression: expression,
       ExpressionAttributeNames: attributeNames,
@@ -83,12 +84,16 @@ export async function update<T extends Record<string, unknown>>(
   }
 }
 
-export async function remove(tableName: string, primaryKey: string) {
+export async function remove(
+  tableName: string,
+  primaryKey: string,
+  primaryKeyValue: string
+) {
   try {
     const command = new DeleteItemCommand({
       TableName: tableName,
       Key: {
-        primaryKey: { S: primaryKey },
+        [primaryKey]: { S: primaryKeyValue },
       },
     });
 

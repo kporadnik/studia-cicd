@@ -1,3 +1,4 @@
+import middy from "@middy/core";
 import {
   HttpErrorHandlerMiddleware,
   JsonBodyParserMiddleware,
@@ -5,23 +6,20 @@ import {
 import { DynamoService } from "@/services";
 import { TLambdaContext, TLambdaEvent } from "@/types";
 import { CreateLambdaResponse } from "@/utils";
-import middy from "@middy/core";
 import { v4 as uuid } from "uuid";
 
-const environment = {
-  USERS_TABLE_NAME: process.env.USERS_TABLE_NAME!,
-};
-
 async function lambda(event: TLambdaEvent, ctx: TLambdaContext) {
-  const { USERS_TABLE_NAME } = environment;
+  const { USERS_TABLE_NAME } = {
+    USERS_TABLE_NAME: process.env.USERS_TABLE_NAME!,
+  };
   const { body } = event;
 
   if (!body.firstName || !body.lastName || !body.email) {
     throw new Error("Missing required fields");
   }
 
-  const user = await DynamoService.create(USERS_TABLE_NAME, {
-    userId: {
+  await DynamoService.create(USERS_TABLE_NAME, {
+    user_id: {
       S: uuid(),
     },
     first_name: {
@@ -40,7 +38,6 @@ async function lambda(event: TLambdaEvent, ctx: TLambdaContext) {
 
   return CreateLambdaResponse(200, {
     message: "User has been created successfully",
-    user,
   });
 }
 

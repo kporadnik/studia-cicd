@@ -17,10 +17,10 @@ Resources:
     Properties:
       TableName: users-db
       AttributeDefinitions:
-        - AttributeName: userId
+        - AttributeName: user_id
           AttributeType: S
       KeySchema:
-        - AttributeName: userId
+        - AttributeName: user_id
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
@@ -50,7 +50,7 @@ Resources:
           Type: Api
           Properties:
             Path: /users/retrieve/{userId}
-            Method: post
+            Method: get
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
@@ -66,7 +66,7 @@ Resources:
           Type: Api
           Properties:
             Path: /users/update/{userId}
-            Method: get
+            Method: patch
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
@@ -82,7 +82,7 @@ Resources:
           Type: Api
           Properties:
             Path: /users/delete/{userId}
-            Method: post
+            Method: delete
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
