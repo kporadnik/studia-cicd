@@ -3,7 +3,7 @@ import { MiddlewareObj } from "@middy/core";
 import { APIGatewayProxyEvent } from "aws-lambda";
 
 export function JsonBodyParserMiddleware(): MiddlewareObj<APIGatewayProxyEvent> {
-  const middleware: MiddlewareObj<APIGatewayProxyEvent> = {
+  return {
     before: (request) => {
       const { event } = request;
 
@@ -18,6 +18,4 @@ export function JsonBodyParserMiddleware(): MiddlewareObj<APIGatewayProxyEvent> 
       }
     },
   };
-
-  return middleware;
 }
