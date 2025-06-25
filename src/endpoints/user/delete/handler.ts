@@ -14,6 +14,6 @@ export async function handler(event: APIGatewayEvent, ctx: Context) {
   });
 
   return CreateLambdaResponse(200, {
-    message: "Delete user endpoint conflict",
+    message: "Delete",
   });
 }

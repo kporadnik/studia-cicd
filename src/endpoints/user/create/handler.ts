@@ -8,15 +8,13 @@ const environment = {
 export async function handler(event: APIGatewayEvent, ctx: Context) {
   const { USERS_TABLE_NAME } = environment;
 
-  if (!USERS_TABLE_NAME) {
-    console.error(
-      "USERS_TABLE_NAME is not defined in the environment variables."
-    );
-  }
-
-  console.log("Main branch handler");
+  console.log({
+    environment,
+    httpMethod: event.httpMethod,
+    body: event.body,
+  });
 
   return CreateLambdaResponse(200, {
-    message: "Main branch handler response",
+    message: "Create",
   });
 }
