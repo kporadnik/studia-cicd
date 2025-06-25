@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "bundle": "rimraf ./dist && node bundle.js",
-    "deploy": "npm run bundle && sam deploy --config-file samconfig.toml",
+    "deploy": "npm run bundle && sam deploy --config-file samconfig.toml --no-confirm-changeset",
     "destroy": "sam delete --config-file samconfig.toml",
     "test": "jest"
   },
