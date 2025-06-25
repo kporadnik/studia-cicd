@@ -1,0 +1,91 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Globals:
+  Function:
+    Timeout: 10
+    Runtime: nodejs20.x
+    MemorySize: 128
+    Architectures:
+      - x86_64
+    CodeUri: ./dist
+
+Resources:
+  # DynamoDB
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: users-db
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+
+  # Lambda functions
+  CreateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: endpoints/user/create/handler.handler
+      Events:
+        CreateUserApi:
+          Type: Api
+          Properties:
+            Path: /users/create
+            Method: post
+      Environment:
+        Variables:
+          USERS_TABLE_NAME: !Ref UsersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+  RetrieveUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: endpoints/user/retrieve/handler.handler
+      Events:
+        CreateUserApi:
+          Type: Api
+          Properties:
+            Path: /users/retrieve/{userId}
+            Method: post
+      Environment:
+        Variables:
+          USERS_TABLE_NAME: !Ref UsersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+  UpdateUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: endpoints/user/update/handler.handler
+      Events:
+        CreateUserApi:
+          Type: Api
+          Properties:
+            Path: /users/update/{userId}
+            Method: get
+      Environment:
+        Variables:
+          USERS_TABLE_NAME: !Ref UsersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
+  DeleteUserFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: endpoints/user/delete/handler.handler
+      Events:
+        CreateUserApi:
+          Type: Api
+          Properties:
+            Path: /users/delete/{userId}
+            Method: post
+      Environment:
+        Variables:
+          USERS_TABLE_NAME: !Ref UsersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref UsersTable
