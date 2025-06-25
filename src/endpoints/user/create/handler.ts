@@ -14,7 +14,9 @@ export async function handler(event: APIGatewayEvent, ctx: Context) {
     );
   }
 
+  console.log("Main branch handler");
+
   return CreateLambdaResponse(200, {
-    message: "Create message",
+    message: "Main branch handler response",
   });
 }
