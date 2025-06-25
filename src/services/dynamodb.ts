@@ -1,3 +1,4 @@
+import { PrepareUpdateExpression } from "@/utils";
 import {
   AttributeValue,
   DeleteItemCommand,
@@ -6,7 +7,6 @@ import {
   PutItemCommand,
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
-import { PrepareUpdateExpression } from "../utils";
 
 const dynamoClient = new DynamoDBClient({
   region: process.env.AWS_REGION,
