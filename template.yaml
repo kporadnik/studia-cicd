@@ -15,7 +15,7 @@ Resources:
   UsersTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: users-db
+      TableName: users-table-other-conflict-name # just for conflict
       AttributeDefinitions:
         - AttributeName: userId
           AttributeType: S
