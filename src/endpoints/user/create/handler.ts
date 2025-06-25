@@ -1,11 +1,13 @@
+import { JsonBodyParserMiddleware } from "@/middlewares/json-body-parser";
+import { TLambdaContext, TLambdaEvent } from "@/types";
 import { CreateLambdaResponse } from "@/utils";
-import { APIGatewayEvent, Context } from "aws-lambda";
+import middy from "@middy/core";
 
 const environment = {
   USERS_TABLE_NAME: process.env.USERS_TABLE_NAME,
 };
 
-export async function handler(event: APIGatewayEvent, ctx: Context) {
+async function lambda(event: TLambdaEvent, ctx: TLambdaContext) {
   const { USERS_TABLE_NAME } = environment;
 
   console.log({
@@ -18,3 +20,5 @@ export async function handler(event: APIGatewayEvent, ctx: Context) {
     message: "Create",
   });
 }
+
+export const handler = middy(lambda).use(JsonBodyParserMiddleware());

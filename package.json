@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.835.0",
-    "@aws-sdk/client-lambda": "^3.835.0"
+    "@aws-sdk/client-lambda": "^3.835.0",
+    "@middy/core": "^6.3.2"
   }
 }
