@@ -1,12 +1,17 @@
 const path = require("path");
+const glob = require("glob");
 const esbuild = require("esbuild");
+
+const entryPoints = glob.sync("src/**/*.ts", {
+  ignore: ["**/__tests__/**", "**/*.test.ts"],
+});
 
 esbuild
   .build({
-    entryPoints: ["src/**/*.ts"],
+    entryPoints,
     outdir: "dist",
     bundle: true,
-    minify: process.env.NODE_ENV === "production",
+    minify: true,
     platform: "node",
     target: "node20",
     sourcemap: false,

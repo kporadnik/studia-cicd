@@ -2,10 +2,12 @@
   "name": "studia-cicd",
   "version": "1.0.0",
   "main": "index.js",
+  
   "scripts": {
     "bundle": "rimraf ./dist && node bundle.js",
     "deploy": "npm run bundle && sam deploy --config-file samconfig.toml",
-    "delete": "sam delete --config-file samconfig.toml"
+    "destroy": "sam delete --config-file samconfig.toml",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -17,18 +19,24 @@
   "description": "",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.150",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.4",
+    "aws-sdk-client-mock": "^4.1.0",
     "aws-sdk-client-mock-jest": "^4.1.0",
     "esbuild": "^0.25.5",
     "eslint": "^9.29.0",
     "jest": "^30.0.3",
+    "jest-mock": "^30.0.2",
     "prettier": "^3.6.1",
     "rimraf": "^6.0.1",
+    "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.835.0",
     "@aws-sdk/client-lambda": "^3.835.0",
-    "@middy/core": "^6.3.2"
+    "@aws-sdk/util-dynamodb": "^3.835.0",
+    "@middy/core": "^4.2.7",
+    "uuid": "^11.1.0"
   }
 }
