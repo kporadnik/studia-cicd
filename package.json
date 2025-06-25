@@ -1,8 +1,6 @@
 {
   "name": "studia-cicd",
   "version": "1.0.0",
-  "main": "index.js",
-  
   "scripts": {
     "bundle": "rimraf ./dist && node bundle.js",
     "deploy": "npm run bundle && sam deploy --config-file samconfig.toml",
