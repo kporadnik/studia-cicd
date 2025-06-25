@@ -10,7 +10,7 @@ export async function handler(event: APIGatewayEvent, ctx: Context) {
 
   console.log({
     environment,
-    method: event.httpMethod,
+    httpMethod: event.httpMethod,
     body: event.body,
   });
 
