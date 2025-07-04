@@ -3,8 +3,9 @@ import {
   HttpErrorHandlerMiddleware,
   JsonBodyParserMiddleware,
 } from "@/middlewares";
-import { DynamoService } from "@/services";
+import { DynamoService, UsersService } from "@/services";
 import { TLambdaContext, TLambdaEvent } from "@/types";
+import { TUserUpdateInput } from "@/types/users";
 import { CreateLambdaResponse, PrepareUpdateUserData } from "@/utils";
 import middy from "@middy/core";
 
@@ -12,12 +13,15 @@ async function lambda(event: TLambdaEvent, ctx: TLambdaContext) {
   const { USERS_TABLE_NAME } = {
     USERS_TABLE_NAME: process.env.USERS_TABLE_NAME!,
   };
-  const { body } = event;
+  const body = event.body as TUserUpdateInput;
   const userId = event.pathParameters?.userId!;
   const updateData = PrepareUpdateUserData(body);
 
-  await DynamoService.update(USERS_TABLE_NAME, "user_id", userId, updateData);
-  const user = await DynamoService.get(USERS_TABLE_NAME, "user_id", userId);
+  const user = await UsersService.updateUser(
+    USERS_TABLE_NAME,
+    userId,
+    updateData
+  );
 
   return CreateLambdaResponse(200, {
     user,

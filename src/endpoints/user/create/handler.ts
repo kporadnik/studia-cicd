@@ -3,41 +3,32 @@ import {
   HttpErrorHandlerMiddleware,
   JsonBodyParserMiddleware,
 } from "@/middlewares";
-import { DynamoService } from "@/services";
+import { UsersService } from "@/services";
 import { TLambdaContext, TLambdaEvent } from "@/types";
 import { CreateLambdaResponse } from "@/utils";
 import { v4 as uuid } from "uuid";
+import { TUserCreateInput } from "@/types/users";
 
 async function lambda(event: TLambdaEvent, ctx: TLambdaContext) {
   const { USERS_TABLE_NAME } = {
     USERS_TABLE_NAME: process.env.USERS_TABLE_NAME!,
   };
-  const { body } = event;
+  const body = event.body as TUserCreateInput;
 
-  if (!body.firstName || !body.lastName || !body.email) {
+  if (!body.first_name || !body.last_name || !body.email) {
     throw new Error("Missing required fields");
   }
 
-  await DynamoService.create(USERS_TABLE_NAME, {
-    user_id: {
-      S: uuid(),
-    },
-    first_name: {
-      S: body.firstName,
-    },
-    last_name: {
-      S: body.lastName,
-    },
-    email: {
-      S: body.email,
-    },
-    created_at: {
-      S: new Date().toISOString(),
-    },
+  const userId = uuid();
+
+  const user = await UsersService.createUser(USERS_TABLE_NAME, userId, {
+    first_name: body.first_name,
+    last_name: body.last_name,
+    email: body.email,
   });
 
   return CreateLambdaResponse(200, {
-    message: "User has been created successfully",
+    user,
   });
 }
 

@@ -1,20 +1,22 @@
-export function PrepareUpdateUserData(body: Record<string, any>) {
+import { TUserUpdateInput } from "@/types/users";
+
+export function PrepareUpdateUserData(body: TUserUpdateInput) {
   let updatePayload = {};
 
-  if (body.firstName) {
+  if (body.first_name) {
     updatePayload = {
       ...updatePayload,
       first_name: {
-        S: body.firstName,
+        S: body.first_name,
       },
     };
   }
 
-  if (body.lastName) {
+  if (body.last_name) {
     updatePayload = {
       ...updatePayload,
       last_name: {
-        S: body.lastName,
+        S: body.last_name,
       },
     };
   }

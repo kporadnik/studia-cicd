@@ -1,4 +1,4 @@
-import { DynamoService } from "@/services";
+import { UsersService } from "@/services";
 import { MiddlewareObj } from "@middy/core";
 
 export function CheckUserByIdMiddleware(): MiddlewareObj {
@@ -15,15 +15,7 @@ export function CheckUserByIdMiddleware(): MiddlewareObj {
       }
 
       try {
-        const result = await DynamoService.get(
-          USERS_TABLE_NAME,
-          "user_id",
-          userId
-        );
-
-        if (!result) {
-          throw new Error(`User not found`);
-        }
+        await UsersService.isUserExistsById(USERS_TABLE_NAME, userId);
       } catch (error: any) {
         throw new Error(
           `Error retrieving user with ID ${userId}: ${error.message}`

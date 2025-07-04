@@ -3,7 +3,7 @@ import {
   HttpErrorHandlerMiddleware,
   JsonBodyParserMiddleware,
 } from "@/middlewares";
-import { DynamoService } from "@/services";
+import { UsersService } from "@/services";
 import { TLambdaContext, TLambdaEvent } from "@/types";
 import { CreateLambdaResponse } from "@/utils";
 import middy from "@middy/core";
@@ -14,7 +14,7 @@ async function lambda(event: TLambdaEvent, ctx: TLambdaContext) {
   };
   const userId = event.pathParameters?.userId!;
 
-  const user = await DynamoService.get(USERS_TABLE_NAME, "user_id", userId);
+  const user = await UsersService.retrieveUser(USERS_TABLE_NAME, userId);
 
   return CreateLambdaResponse(200, {
     user,

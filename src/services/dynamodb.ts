@@ -5,6 +5,8 @@ import {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
+  QueryCommand,
+  QueryCommandInput,
   UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
@@ -27,7 +29,7 @@ export async function get(
     });
     const result = await dynamoClient.send(command);
 
-    if (!result.Item) {
+    if (!result?.Item) {
       throw new Error("Item not found");
     }
 
@@ -40,7 +42,40 @@ export async function get(
   }
 }
 
-export async function create(
+export async function query<T = Record<string, any>[]>(
+  tableName: string,
+  indexName: string,
+  keyName: string,
+  keyValue: string
+) {
+  try {
+    const params: QueryCommandInput = {
+      TableName: tableName,
+      IndexName: indexName,
+      KeyConditionExpression: "#key = :value",
+      ExpressionAttributeNames: {
+        "#key": keyName,
+      },
+      ExpressionAttributeValues: {
+        ":value": { S: keyValue },
+      },
+    };
+
+    const command = new QueryCommand(params);
+    const result = await dynamoClient.send(command);
+
+    if (!result.Items || result.Items.length === 0) {
+      return null;
+    }
+
+    return result.Items.map((item) => unmarshall(item)) as T;
+  } catch (error) {
+    console.error("Error querying items:", error);
+    throw new Error("Could not query item from DynamoDB");
+  }
+}
+
+export async function create<T extends Record<string, unknown>>(
   tableName: string,
   data: Record<string, AttributeValue>
 ) {
@@ -50,7 +85,14 @@ export async function create(
       Item: data,
     });
 
-    return await dynamoClient.send(command);
+    const result = await dynamoClient.send(command);
+    const attributes = result?.Attributes;
+
+    if (!attributes) {
+      throw new Error("Item creation failed, no attributes returned");
+    }
+
+    return unmarshall(attributes) as T;
   } catch (error) {
     console.error("Error creating item:", error);
     throw new Error("Could not create item in DynamoDB");
@@ -95,6 +137,7 @@ export async function remove(
       Key: {
         [primaryKey]: { S: primaryKeyValue },
       },
+      ReturnValues: "ALL_OLD",
     });
 
     return await dynamoClient.send(command);
