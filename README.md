@@ -5,7 +5,7 @@ Aplikacja chmurowa typu serverless udostępniająca REST API do zarządzania uż
 Kod został napisany w TypeScript z wykorzystaniem czystej architektury. Dane są przechowywane w DynamoDB, a backend działa w AWS Lambda, zarządzany przez API Gateway.
 
 ## Link do wdrożonej aplikacji
-https://twoja-api-endpoint.amazonaws.com/prod/user/create
+https://cq1hri6oeb.execute-api.eu-central-1.amazonaws.com/dev/user/create
 
 ## Technologie
 - Node.js (v20)
@@ -17,8 +17,8 @@ https://twoja-api-endpoint.amazonaws.com/prod/user/create
 
 ## Instalacja lokalna
 ```bash
-git clone https://github.com/twoj-login/twoj-projekt.git
-cd twoj-projekt
+git clone https://github.com/kporadnik/studia-cicd
+cd studia-cicd
 npm install
 ```
 
@@ -39,10 +39,10 @@ Pipeline GitHub Actions realizuje:
 - Wdrożenie funkcji Lambda na chmurę
 
 ## API - Endpointy
-- ```POST /user/create``` – tworzy nowego użytkownika
-- ```GET /user/retrieve/{id}``` – pobiera dane użytkownika
-- ```PATCH /user/update/{id}``` – aktualizuje dane użytkownika
-- ```DELETE /user/delete/{id}``` – usuwa użytkownika
+- ```POST /users/create``` – tworzy nowego użytkownika
+- ```GET /users/retrieve/{id}``` – pobiera dane użytkownika
+- ```PATCH /users/update/{id}``` – aktualizuje dane użytkownika
+- ```DELETE /users/delete/{id}``` – usuwa użytkownika
 
 ## Struktura tabeli DynamoDB (users-db)
 Nazwa pola	Typ	Opis

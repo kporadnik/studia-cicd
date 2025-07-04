@@ -28,6 +28,7 @@ describe("Create user lambda", () => {
     first_name: "Jan",
     last_name: "Kowalski",
     email: "root@gmail.com",
+    created_at: mockedDate.toISOString(),
   };
   // AWS database needs other format
   const validUserAWS = {
@@ -35,6 +36,7 @@ describe("Create user lambda", () => {
     first_name: { S: validUser.first_name },
     last_name: { S: validUser.last_name },
     email: { S: validUser.email },
+    created_at: { S: validUser.created_at },
   };
   const validEvent = {
     body: {

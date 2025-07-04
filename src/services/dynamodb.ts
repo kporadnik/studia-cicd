@@ -85,14 +85,11 @@ export async function create<T extends Record<string, unknown>>(
       Item: data,
     });
 
-    const result = await dynamoClient.send(command);
-    const attributes = result?.Attributes;
+    await dynamoClient.send(command);
 
-    if (!attributes) {
-      throw new Error("Item creation failed, no attributes returned");
-    }
-
-    return unmarshall(attributes) as T;
+    return unmarshall({
+      ...data,
+    }) as T;
   } catch (error) {
     console.error("Error creating item:", error);
     throw new Error("Could not create item in DynamoDB");
