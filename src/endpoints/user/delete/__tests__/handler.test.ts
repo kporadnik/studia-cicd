@@ -29,18 +29,22 @@ describe("Delete user lambda", () => {
   });
 
   it("should delete a user and return 200", async () => {
-    dynamoMock.on(GetItemCommand).resolves({
-      Item: {
-        user_id: {
-          S: mockedUUID,
-        },
-        first_name: { S: "Jan" },
-        last_name: { S: "Kowalski" },
-        email: { S: "root@gmail.com" },
-        created_at: { S: mockedDate.toISOString() },
+    const awsUser = {
+      user_id: {
+        S: mockedUUID,
       },
+      first_name: { S: "Jan" },
+      last_name: { S: "Kowalski" },
+      email: { S: "root@gmail.com" },
+      created_at: { S: mockedDate.toISOString() },
+    };
+
+    dynamoMock.on(GetItemCommand).resolves({
+      Item: awsUser,
     });
-    dynamoMock.on(DeleteItemCommand).resolves({});
+    dynamoMock.on(DeleteItemCommand).resolves({
+      Attributes: awsUser,
+    });
 
     const response = await handler(validEvent as any, mockContext);
     const parsed = JSON.parse(response.body);
