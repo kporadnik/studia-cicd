@@ -55,16 +55,16 @@ email	String	Adres e-mail
 ```POST /user/create```
 ```json 
 {
-  "firstName": "Kacper",
-  "lastName": "Kowalski",
+  "first_name": "Kacper",
+  "last_name": "Kowalski",
   "email": "root@gmail.com"
 }
 ```
 ```PATCH /user/update/{id}```
 ```json
 {
-  "firstName": "Jan",
-  "lastName": "Nowak"
+  "first_name": "Jan",
+  "last_name": "Nowak"
 }
 ```
 
