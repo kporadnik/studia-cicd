@@ -11,6 +11,7 @@ Globals:
     CodeUri: ./dist
 
 Resources:
+
   # DynamoDB
   UsersTable:
     Type: AWS::DynamoDB::Table
@@ -24,6 +25,15 @@ Resources:
           KeyType: HASH
       BillingMode: PAY_PER_REQUEST
 
+  # API Gateway
+  PublicUserDevApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: PublicUserDevApi
+      StageName: dev
+      Auth:
+        DefaultAuthorizer: NONE
+
   # Lambda functions
   CreateUserFunction:
     Type: AWS::Serverless::Function
@@ -35,6 +45,7 @@ Resources:
           Properties:
             Path: /users/create
             Method: post
+            RestApiId: !Ref PublicUserDevApi
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
@@ -51,6 +62,7 @@ Resources:
           Properties:
             Path: /users/retrieve/{userId}
             Method: get
+            RestApiId: !Ref PublicUserDevApi
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
@@ -67,6 +79,7 @@ Resources:
           Properties:
             Path: /users/update/{userId}
             Method: patch
+            RestApiId: !Ref PublicUserDevApi
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
@@ -83,6 +96,7 @@ Resources:
           Properties:
             Path: /users/delete/{userId}
             Method: delete
+            RestApiId: !Ref PublicUserDevApi
       Environment:
         Variables:
           USERS_TABLE_NAME: !Ref UsersTable
