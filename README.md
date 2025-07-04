@@ -45,11 +45,12 @@ Pipeline GitHub Actions realizuje:
 - ```DELETE /users/delete/{id}``` – usuwa użytkownika
 
 ## Struktura tabeli DynamoDB (users-db)
-Nazwa pola	Typ	Opis
-user_id	PK (S)	Unikalny identyfikator
-first_name	String	Imię użytkownika
-last_name	String	Nazwisko użytkownika
-email	String	Adres e-mail
+Nazwa pola	| Typ |	Opis
+--- | --- | --- |
+user_id | PK(S) | Unikalny identyfikator użytkownika (Primary Key typu String)
+first_name |	String |	Imię użytkownika
+last_name |	String	| Nazwisko użytkownika
+email	| GSI(S) |	Adres e-mail użytkownika – używany jako Global Secondary Index do sprawdzania zarejestrowanego użytkownika
 
 ## Przykładowe requesty
 ```POST /user/create```
