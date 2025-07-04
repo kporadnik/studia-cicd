@@ -17,9 +17,17 @@ const environment = {
 
 describe("Delete user lambda", () => {
   const mockContext = {} as any;
-  const userId = "abc-123";
   const validEvent = {
-    pathParameters: { userId },
+    pathParameters: { userId: mockedUUID },
+  };
+  const awsUser = {
+    user_id: {
+      S: mockedUUID,
+    },
+    first_name: { S: "Jan" },
+    last_name: { S: "Kowalski" },
+    email: { S: "root@gmail.com" },
+    created_at: { S: mockedDate.toISOString() },
   };
 
   beforeEach(() => {
@@ -29,16 +37,6 @@ describe("Delete user lambda", () => {
   });
 
   it("should delete a user and return 200", async () => {
-    const awsUser = {
-      user_id: {
-        S: mockedUUID,
-      },
-      first_name: { S: "Jan" },
-      last_name: { S: "Kowalski" },
-      email: { S: "root@gmail.com" },
-      created_at: { S: mockedDate.toISOString() },
-    };
-
     dynamoMock.on(GetItemCommand).resolves({
       Item: awsUser,
     });
@@ -54,9 +52,37 @@ describe("Delete user lambda", () => {
     expect(dynamoMock).toHaveReceivedCommandWith(DeleteItemCommand, {
       TableName: environment.USERS_TABLE_NAME,
       Key: {
-        user_id: { S: userId },
+        user_id: { S: mockedUUID },
       },
     });
+  });
+
+  it("should return error if user does not exist", async () => {
+    dynamoMock.on(GetItemCommand).resolves({
+      Item: undefined,
+    });
+    const response = await handler(validEvent as any, mockContext);
+    const parsed = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(500);
+    expect(parsed.message).toBe(
+      `Error retrieving user with ID ${mockedUUID}: Could not retrieve item from DynamoDB`
+    );
+  });
+
+  it("should return error when user is not deleted", async () => {
+    dynamoMock.on(GetItemCommand).resolves({
+      Item: awsUser,
+    });
+    dynamoMock.on(DeleteItemCommand).resolves({
+      Attributes: undefined,
+    });
+
+    const response = await handler(validEvent as any, mockContext);
+    const parsed = JSON.parse(response.body);
+
+    expect(response.statusCode).toBe(500);
+    expect(parsed.message).toBe(`Could not delete user with ID ${mockedUUID}`);
   });
 
   it("should return error if userId is missing", async () => {
@@ -77,7 +103,7 @@ describe("Delete user lambda", () => {
 
     expect(response.statusCode).toBe(500);
     expect(parsed.message).toContain(
-      "Error retrieving user with ID abc-123: Could not retrieve item from DynamoDB"
+      `Error retrieving user with ID ${mockedUUID}: Could not retrieve item from DynamoDB`
     );
   });
 });
