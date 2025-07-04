@@ -5,7 +5,7 @@ Aplikacja chmurowa typu serverless udostępniająca REST API do zarządzania uż
 Kod został napisany w TypeScript z wykorzystaniem czystej architektury. Dane są przechowywane w DynamoDB, a backend działa w AWS Lambda, zarządzany przez API Gateway.
 
 ## Link do wdrożonej aplikacji
-https://cq1hri6oeb.execute-api.eu-central-1.amazonaws.com/dev/user/create
+https://l52c8igqs1.execute-api.eu-central-1.amazonaws.com/dev
 
 ## Technologie
 - Node.js (v20)
