@@ -52,9 +52,7 @@ export async function updateUser<T extends Record<string, unknown>>(
   updateData: T
 ) {
   await DynamoService.update(tableName, "user_id", userId, updateData);
-  const user = await DynamoService.get(tableName, "user_id", userId);
-
-  return user;
+  return await DynamoService.get(tableName, "user_id", userId);
 }
 
 export async function deleteUser(tableName: string, userId: string) {

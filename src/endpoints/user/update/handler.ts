@@ -3,7 +3,7 @@ import {
   HttpErrorHandlerMiddleware,
   JsonBodyParserMiddleware,
 } from "@/middlewares";
-import { DynamoService, UsersService } from "@/services";
+import { UsersService } from "@/services";
 import { TLambdaContext, TLambdaEvent } from "@/types";
 import { TUserUpdateInput } from "@/types/users";
 import { CreateLambdaResponse, PrepareUpdateUserData } from "@/utils";
