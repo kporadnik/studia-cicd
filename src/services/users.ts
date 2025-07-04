@@ -60,6 +60,11 @@ export async function updateUser<T extends Record<string, unknown>>(
 export async function deleteUser(tableName: string, userId: string) {
   await isUserExistsById(tableName, userId);
   const result = await DynamoService.remove(tableName, "user_id", userId);
+  const attributes = result?.Attributes;
 
-  return !!result?.Attributes;
+  if (!attributes) {
+    throw new Error(`Could not delete user with ID ${userId}`);
+  }
+
+  return true;
 }
